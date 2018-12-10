@@ -10,14 +10,41 @@
 #include <tgmath.h>
 #include <math.h>
 
-int E (int x, int x2, int x3) {
+double E (int x, int x2, int x3) {
     
-    int retval1 = (pow(x,3) + pow(x2,4) + pow(x3,6) - 263467);
-    int retval2 = (pow(x2,4) + (x*x3*pow(x2,2)) + pow(x,5) - 2403);
-    int retval3 = (pow(x,6) + (pow(x2,2) * pow(x3,3) * pow(x,4)) + (pow(x2,3) * pow(x3,5)) - 8571609);
+    double retval1 = ((pow(x,3) + pow(x2,4) + pow(x3,6)) - 263467);
+    double retval2 = ((pow(x2,4) + (x*x3*pow(x2,2)) + pow(x,5)) - 2403);
+    double retval3 = ((pow(x,6) + (pow(x2,2) * pow(x3,3) * pow(x,4)) + (pow(x2,3) * pow(x3,5))) - 8571609);
     
-    int returnValue = ( pow(retval1,2) + pow(retval2,2) + pow(retval3,2));
+    retval1 = pow(retval1,2);
+    retval2 = pow(retval2,2);
+    retval3 = pow(retval3,2);
+    
+    double returnValue = ( pow(retval1,2) + pow(retval2,2) + pow(retval3,2));
     return returnValue;
+}
+
+void bruteForce() {
+    
+    for (int y1 = 0; y1 < 10; y1++) {
+        for (int y2 = 0 ; y2 < 10; y2++) {
+            for (int y3 = 0; y3 < 10; y3++) {
+                
+                if (E(y1,y2,y3) == 0) {
+                    
+                    std::cout << "Solution Found:\n";
+                    std::cout << y1;
+                    std::cout << " ";
+                    std::cout << y2;
+                    std::cout << " ";
+                    std::cout << y3;
+                    std::cout << " ";
+                    std::cout << "\n";
+                }
+            }
+        }
+    }
+    
 }
 
 int main(int argc, const char * argv[]) {
@@ -30,25 +57,43 @@ int main(int argc, const char * argv[]) {
 
     for (int temp = 100; temp > 9; temp -= 10){
 
-        int result1 = E(x1, x2, x3);
+        double result1 = E(x1, x2, x3);
 
-        for (int x = 0; x < 5 ; x++) {
+        for (int x = 0; x < 50 ; x++) {
             int x4 = arc4random_uniform(9);
+            while (x1 == x4) {
+                x4 = arc4random_uniform(9);
+            }
             int x5 = arc4random_uniform(9);
+            while (x2 == x5) {
+                x5 = arc4random_uniform(9);
+            }
             int x6 = arc4random_uniform(9);
-
-            int result2 = E(x4,x5,x6);
+            while (x3 == x6) {
+                x6 = arc4random_uniform(9);
+            }
+            
+            double result2 = E(x4,x5,x6);
 
             float p = exp(-(result1 - result2)/temp);
 
-            if (p>=1) {
+            if (p>1) {
                 accepted1 = x4;
                 accepted2 = x5;
                 accepted3 = x6;
             } else {
                 x4 = arc4random_uniform(9);
+                while (x1 == x4) {
+                    x4 = arc4random_uniform(9);
+                }
                 x5 = arc4random_uniform(9);
+                while (x2 == x5) {
+                    x5 = arc4random_uniform(9);
+                }
                 x6 = arc4random_uniform(9);
+                while (x3 == x6) {
+                    x6 = arc4random_uniform(9);
+                }
             }
         }
         std::cout << accepted1;
@@ -60,5 +105,8 @@ int main(int argc, const char * argv[]) {
         std::cout << temp;
         std::cout << "\n";
     }
+    
+    bruteForce();
+    
     return 0;
 }
